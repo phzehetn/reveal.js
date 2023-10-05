@@ -1,3 +1,13 @@
+# View Presentation: 
+
+1. `git clone git@github.com:phzehetn/reveal.js.git`
+2. `cd reveal.js && npm install
+3. `npm start`
+
+This starts a server on port 8000. The presentation can then be seen in a web browser visiting `localhost:8000`.
+This is certainly not more complicated that opening a pdf...
+
+---
 <p align="center">
   <a href="https://revealjs.com">
   <img src="https://hakim-static.s3.amazonaws.com/reveal-js/logo/v1/reveal-black-text-sticker.png" alt="reveal.js" width="500">

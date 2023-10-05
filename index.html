@@ -8,7 +8,8 @@
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+		<link rel="stylesheet" href="dist/theme/sky.css">
+		<!-- <link rel="stylesheet" href="dist/theme/dracula.css"> -->
 
 		<!-- Theme used for syntax highlighted code -->
 		<link rel="stylesheet" href="plugin/highlight/monokai.css">
@@ -16,8 +17,383 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<!-- Title -->
+				<!-- <section data-markdown> -->
+				<section data-markdown >
+					<textarea data-template>
+						## End-to-End Reconstruction for Highly Granular Calorimeters
+						Dolores Garcia, Jan Kieseler, Shah Rukh Qasim, **Philipp Zehetner**
+					</textarea>
+				</section>
+
+
+				<section class="custom-slide">
+					<h3> Motivation</h3>
+					<div class="split-container">
+						<div class="text-half">
+						<h4>High-Luminosity-LHC </h4>
+						<ul>
+							<li>CMS collisions at 200 pile-up (PU)</li>
+							<li>Upgrade for end-cap calorimeter</li>
+							<li>HGCAL: 2x ~3M readout channels</li>
+							<li>Silicon sensors and scintillators</li>
+						</ul>
+						<!-- vertical space-->
+						<!-- <span style="display:inline-block; height: 80px;"></span> -->
+						<p> <br> </p>
+
+						<h4>Reconstruction Goals</h4>
+						<ul>
+							<li>Combine detector hits with tracks</li>
+							<li><b>Cluster</b> hits to build showers</li>
+							<li><b>Regress</b> energy of showers</li>
+							<li><b>Classify</b> shower type</li>
+							<li>All of this using one <b>differentiable</b> network</li>
+						</ul>
+						</div>
+
+						<div class="image-half">
+							<img src="plots/HGCAL.png" alt="Image">
+							<h4>CMS - HGCAL</h4>
+						</div>
+
+						<div class="text-half">
+							<h4>Methods</h4>
+							<ul>
+								<li>Graph-based neural network
+									<br>&nbsp implemented in tensorflow</li>
+								<li>GravNet Architecture
+									<br>&nbsp transforming point cloud into graph</li>
+								<li>Object Condensation Loss
+									<br>&nbsp allowing points to represent objects </li>
+							</ul>
+							<!-- vertical space-->
+							<!-- <span style="display:inline-block; height: 80px;"></span> -->
+							<p> <br> </p>
+
+							<h4>References</h4>
+							<ul>
+								<li>Linke to Object Condensation</li>
+								<li>Link to GravNet</li>
+								<li>Link to Reconstruction Paper</li>
+								<li>Link to ACAT 2021 (Thomas)</li>
+								<li>Link to ACAT 2022 (Me)</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section class="custom-slide">
+					<h2>Training Events</h2>
+					<div class="split-container">
+						<div class="image-half">
+							<iframe src="plots/train_noPU.html"  width="810px" height="810px" frameborder="0"></iframe>
+						</div>
+
+						<div class="text-half">
+							<h4>Detector</h4>
+							<ul>
+								<li>Toy Detector for easier developement (simulated with GEANT4)
+								</li>
+								<li>Similarities to HGCAL
+									<ul>
+										<li> 2x ~3M readout channels</li>
+										<li> ~250k active channels in 200 PU</li>
+									</ul>
+								</li>
+								<li>Differences to HGCAL
+									<ul>
+										<li> onlys silicon sensors</li>
+										<li> no tracker, electronics or magnetic field</li>
+										<li> different geometry</li>
+									</ul>
+								</li>
+							</ul>
+							<!-- vertical space-->
+							<!-- <span style="display:inline-block; height: 80px;"></span> -->
+							<h4>Data Sets</h4>
+							<ul>
+								<li>Built from
+									<ul>
+										<li>Single particle simulations starting in front of detector </li>
+										<li>Minimum bias proton-proton collisions at 13 TeV at interaction point</li>
+									</ul>
+								</li>
+								<li>Train Data
+									<ul>
+										<li>Multiple showers + random noise</li>
+										<li>Multiple showers + random noise + 200 PU in random 30° φ region </li>
+									</ul>
+								</li>
+								<li>Test Data
+									<ul>
+										<li>Multiple showers + random noise</li>
+										<li>Single shower + random noise + 200 PU in full detector</li>
+									</ul>
+								</li>
+								<li> Tracks
+									<ul>
+										<li> Tracks are added for all charged particles</li>
+										<li> They contain a special flag and have the particles' original energy (+noise)
+									</ul>
+								</li>
+							</ul>
+
+						</div>
+					</div>
+
+				</section>
+
+
+				<!-- Concepts -->
+				<section>
+					<section>
+						<h2>Overview</h2>
+						<div class="split-container">
+							<dif class="image-half">
+								<h4> Detector Space</h4>
+								<img src="plots/xyz_space.png" alt="Image">
+							</dif>
+							<dif class="text-half">
+								<h4>Concept </h4>
+								<ul>
+									<li> Colour represents different showers</li>
+									<li> Overlapping showers make clustering in detector space difficult</li>
+									<li> We learn mapping into clustering space</li>
+									<li> Along with cluster coordinates we learn a confidence β
+										<br> &nbsp; β close to 1 means that a hit can represent  shower </li>
+									<li> In clustering space hit from the same shower should overlap</li>
+								</ul>
+								<!-- <p> Map every hit from detector space to cluster space</p> -->
+							</dif>
+							<dif class="image-half">
+								<h4> Cluster Space</h4>
+								<img src="plots/cluster_space.png" alt="Image">
+							</dif>
+						</div>
+					</section>
+
+					<section>
+						<h2>Object Condensation</h2>
+						<div class="split-container">
+							<div class="text-half">
+								\[\begin{aligned}
+								 	q_\alpha &amp; = \tanh^2 \left( \beta_\alpha \right)  \quad \alpha \Rightarrow \text{condensation point} \\
+									V_\text{att} &amp; \propto q_\alpha \cdot \vert x - x_\alpha \vert^2 \\
+									V_\text{rep} &amp; \propto q_\alpha \cdot \max \left( 0, 1 - \vert x - x_\alpha \vert \right) \\
+									M_{jk} &amp; = \begin{cases}
+										1 &amp; \text{if hit } j \text{ part of shower } k \\
+										0 &amp; \text{else}
+									\end{cases} \\
+									L_\text{V} &amp; = \frac{1}{N} \sum_{j=1}^{N} q_j \sum_{k=1}^{K} \left( M_{jk} V_\text{att}(x_j) + (1-M_{jk}) V_\text{rep}(x_j) \right) \\
+									L_\beta &amp; = \frac{1}{K} \sum_{k=1}^{K} \left( 1 - \beta_\alpha^k \right) + \frac{1}{N_\text{noise}} \sum_{j \in N_\text{noise}} \beta_j \\
+								\end{aligned} \]
+							</div>
+
+							<div class="image-half">
+								<img src="plots/oc-potential.png" alt="Image">
+								<p>Potential seen by a single hit</p>
+							</div>
+
+						</div>
+
+					</section>
+
+
+					<section>
+						<h3>Object Condensation during Training</h3>
+						<!-- insert .mp4 file -->
+						<!-- <video>
+							<source data-src="plots/training.mp4" type="video/mp4" />
+						</video> -->
+						<video controls>
+							<source data-src="training.webm" type="video/webm" width="600" height="600"/>
+						</video>
+						<!-- <iframe width="800" height="800" src="https://www.youtube.com/embed/eIchwB6xJJI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> -->
+						<!-- <iframe width="800" height="800" src="training2.webm" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> -->
+</iframe>
+					</section>
+
+					<section>
+						<h2>GravNet</h2>
+						<div class="split-container">
+							<div class="text-half">
+								<h4> GravNet Architecture</h4>
+								<ol>
+									<li> Transform input features \( F_\text{in} \) via dense layer into
+										<ul>
+											<li>transformed features \(F_\text{LR}\)
+											<li>low-dimensional GravNet coordinates \(S\)
+										</ul>
+									<li> Use GravNet coordinates to build grap via KNN </li>
+									<li> Aggregate weighted \(F_\text{LR}\) over neighbours
+										<ul>
+											<li> Weights depend on distance between nodes</li>
+											<li> Aggregation is <i> mean</i> or <i>max</i></li>
+										</ul>
+									</li>
+									<li> Concatenate to produce output $F_\text{out}$</li>
+								</ol>
+								<p><br></p>
+								<div class="split-container">
+									<div class="'image-half">
+										<img src="plots/gravNet1.png" style="width: 100%; height: auto;" alt="Image">
+										<!-- <img src="plots/gravNet1.png" style="width: 50%; height: auto;" alt="Image"> -->
+									</div>
+									<div class="'image-half">
+										<!-- <img src="plots/gravNet2.png" style="width: 50%; height: auto;" alt="Image"> -->
+										<img src="plots/gravNet2.png" style="width: 100%; height: auto;" alt="Image">
+									</div>
+								</div>
+							</div>
+							<div class="image-half">
+								<h4> Network Architecture</h4>
+								<ol>
+									<li> Transform and normalize inputs </li>
+									<li> Use several GravNet layers to exchange information among neighbours </li>
+									<li> Create ouputs using information from all Gravnet layers
+										<ul>
+											<li> Cluster coordinates</li>
+											<li> Confidence β</li>
+											<li> Energy correction factor</li>
+											<li> Particle ID</li>
+										</ul>
+									</li>
+								</ol>
+								<img src="plots/Architecture.png" style="width: 100%; height: auto;" alt="Image">
+							</div>
+
+						</div>
+					</section>
+
+				</section>
+
+				<!-- Results -->
+				<section>
+					<section>
+						<h2>Results</h2>
+					</section>
+					<section>
+						<h2>Shower Quality</h2>
+						<div class="split-container">
+							<div class="text-half">
+								<h3>Efficiency</h3>
+								<i> Percentage of truth showers that are matched to a predicted shower</i>
+							</div>
+							<div class="text-half">
+								<h3>Purity</h3>
+								<i> Energy of a predicted shower that belongs to matched truth shower</i>
+							</div>
+							<div class="text-half">
+								<h3>Containment</h3>
+								<i> Energy of truth shower that is contained in the matched predicted shower</i>
+							</div>
+						</div>
+
+						<p><br>Purity and Containment show a trade-off.<br>
+							If our algorithm merges showers we retain a high containment but loose purity.
+							Splitting showers on the other hand will reduce keep purity high but reduces containment.
+						</p>
+					</section>
+
+					<section>
+						<h3>Efficiency</h3>
+						<div class="image-container">
+							<div class="image">
+							<img src="plots/efficiency_hadronic.png" alt="Image 1">
+							</div>
+							<div class="image">
+							<img src="plots/efficiency_electromagnetic.png" alt="Image 2">
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h3>Purity</h3>
+						<div class="image-container">
+							<div class="image">
+							<img src="plots/purity_electromagnetic.png" alt="Image 1">
+							</div>
+							<div class="image">
+							<img src="plots/purity_hadronic.png" alt="Image 2">
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h3>Contaiment</h3>
+						<div class="image-container">
+							<div class="image">
+							<img src="plots/containment_electromagnetic.png" alt="Image 1">
+							</div>
+							<div class="image">
+							<img src="plots/containment_hadronic.png" alt="Image 2">
+							</div>
+						</div>
+					</section>
+
+
+					<section>
+						<h3>Response - 40PU</h3>
+						<div class="image-container">
+							<div class="image">
+							<img src="plots/response_electromagnetic_40PU.png" alt="Image 1">
+							</div>
+							<div class="image">
+							<img src="plots/response_hadronic_40PU.png" alt="Image 2">
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h3>Resolution - 40PU</h3>
+						<div class="image-container">
+							<div class="image">
+							<img src="plots/resolution_electromagnetic_40PU.png" alt="Image 1">
+							</div>
+							<div class="image">
+							<img src="plots/resolution_hadronic_40PU.png" alt="Image 2">
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h3>Response - 200PU</h3>
+						<div class="image-container">
+							<div class="image">
+							<img src="plots/response_electromagnetic_200PU.png" alt="Image 1">
+							</div>
+							<div class="image">
+							<img src="plots/response_hadronic_200PU.png" alt="Image 2">
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h3>Resolution - 200PU</h3>
+						<div class="image-container">
+							<div class="image">
+							<img src="plots/resolution_electromagnetic_200PU.png" alt="Image 1">
+							</div>
+							<div class="image">
+							<img src="plots/resolution_hadronic_200PU.png" alt="Image 2">
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h3>Particle Identfication</h3>
+						<div class="image-container">
+							<div class="image">
+							<img src="plots/pid_40_20.png" alt="Image 1">
+							</div>
+							<div class="image">
+							<img src="plots/pid_200_200.png" alt="Image 2">
+							</div>
+						</div>
+					</section>
+
+				</section>
 			</div>
 		</div>
 
@@ -25,16 +401,176 @@
 		<script src="plugin/notes/notes.js"></script>
 		<script src="plugin/markdown/markdown.js"></script>
 		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
 		<script>
 			// More info about initialization & config:
 			// - https://revealjs.com/initialization/
 			// - https://revealjs.com/config/
 			Reveal.initialize({
 				hash: true,
+				width: 1920,
+				height: 1080,
+				margin: 0,
+				minScale: 0.2,
+				maxScale: 2.0,
 
 				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.MathJax2 ]
 			});
 		</script>
+
+		<style>
+			/* CSS rule to scale the image */
+			img.auto-scale12 {
+			height: 12vh; /* 10% of the viewport height */
+			width: auto; /* Maintain aspect ratio */
+			}
+
+			/* CSS rule to scale the image */
+			.custom-iframe {
+			height: 30vh; /* 10% of the viewport height */
+			width: auto; /* Maintain aspect ratio */
+			}
+
+			/* Custom CSS for scaling iframe content */
+			.custom-iframe2 {
+			/*width: 100%; /* Set the desired width */
+			/*height: 100%; /* Set the desired height */
+			transform-origin: 0 0; /* Set the transform origin to the top-left corner */
+			transform: scale(0.8); /* Adjust the scaling factor as needed */
+			}
+
+			/* Style the container to display images side by side */
+			.image-container {
+			display: flex; /* Use flexbox for layout */
+			justify-content: space-between; /* Space evenly between images */
+			align-items: center; /* Vertically center images */
+			}
+
+			/* Style individual images */
+			.image {
+			width: 48%; /* Adjust the width as needed for spacing */
+			}
+
+			/* Optional: Add margin or padding for spacing between images */
+			.image + .image {
+			margin-left: 2%; /* Adjust margin for spacing */
+			}
+
+			/* Style the split container */
+			.split-container {
+			display: flex; /* Use flexbox for layout */
+			justify-content: space-between; /* Space evenly between halves */
+			align-items: center; /* Vertically center content */
+			}
+
+			/* Style the image half */
+			.image-half {
+			flex: 1; /* Grow to fill half the width */
+			padding: 20px; /* Add padding for spacing */
+			}
+
+			/* Style the text half */
+			.text-half {
+			flex: 1; /* Grow to fill half the width */
+			padding: 20px; /* Add padding for spacing */
+			text-align: left;
+			}
+
+		</style>
+
+		<style>
+			/* Adjust font size for unordered list */
+			ul {
+			font-size: 25px; /* Set your desired font size */
+			}
+
+			/* Optionally adjust font size for list items (li) */
+			ul li {
+			font-size: 26px; /* Set your desired font size */
+			}
+		</style>
+
+		<style>
+		/* Adjust margins */
+		.reveal {
+		margin: 0; /* Remove default margins */
+		}
+
+		/* Adjust slide content width */
+		.reveal .slides {
+		margin: 0; /* Remove slide content margins */
+		padding: 0; /* Remove slide content padding */
+		width: 100%; /* Expand slide content to full width */
+		}
+		</style>
+
+
+		<style type="text/css">
+			/* 1. Style header/footer <div> so they are positioned as desired. */
+			#header-left {
+				position: absolute;
+				top: 0%;
+				left: 0%;
+			}
+			#header-right {
+				position: absolute;
+				top: 0%;
+				right: 2%;
+			}
+			#footer-left {
+				position: absolute;
+				bottom: 2%;
+				left: 1%;
+			}
+			#footer-right {
+				position: absolute;
+				bottom: 2%;
+				right: 5%;
+			}
+		</style>
+
+		<style>
+		/* Adjust margins for specific slide content */
+		.custom-slide {
+		margin: 0; /* Remove default margins */
+		padding: 0; /* Remove default padding */
+		}
+		</style>
+
+		<!-- 2. Create hidden header/footer <div> -->
+		<div id="hidden" style="display:none;">
+			<div id="header">
+				<!-- <div id="header-left"></div> -->
+				<div id="header-right">
+					<img class="auto-scale12" src="./plots/LMU_Muenchen_Logo.svg" alt="LMU">
+					<!-- insert horizontal space between the two pictures-->
+					<span style="display:inline-block; width: 20px;"></span>
+					<img class="auto-scale12" src="./plots/CERN_logo.svg" alt="CERN">
+				</div>
+				<!-- <div id="header-right">HEADER-RIGHT</div> -->
+				<div id="footer-left">
+					Connecting The Dots 2023
+				</div>
+				<div id="footer-right">
+					10.10.2023
+				</div>
+			</div>
+		</div>
+
+		<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+		<script type="text/javascript">
+			// 3. On Reveal.js ready event, copy header/footer <div> into each `.slide-background` <div>
+			var header = $('#header').html();
+			if ( window.location.search.match( /print-pdf/gi ) ) {
+				Reveal.addEventListener( 'ready', function( event ) {
+					$('.slide-background').append(header);
+				});
+			}
+			else {
+				$('div.reveal').append(header);
+		}
+		</script>
+
 	</body>
 </html>
