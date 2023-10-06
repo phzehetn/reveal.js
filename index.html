@@ -53,7 +53,12 @@
 						</div>
 
 						<div class="image-half">
-							<img src="plots/HGCAL.png" alt="Image">
+							<figure>
+								<img src="plots/HGCALdesign_new.png" alt="Image">
+								<figcaption style="font-size: 15px;">
+									<a href="https://arxiv.org/abs/1708.08234">https://arxiv.org/abs/1708.08234</a>
+								</figcaption>
+							</figure>
 							<h4>CMS - HGCAL</h4>
 						</div>
 
@@ -73,11 +78,11 @@
 
 							<h4>References</h4>
 							<ul>
-								<li>Linke to Object Condensation</li>
-								<li>Link to GravNet</li>
-								<li>Link to Reconstruction Paper</li>
-								<li>Link to ACAT 2021 (Thomas)</li>
-								<li>Link to ACAT 2022 (Me)</li>
+								<li><a href="https://arxiv.org/abs/2002.03605">Object Condensation</a></li>
+								<li><a href="https://arxiv.org/abs/1902.07987">GravNet</a></li>
+								<li><a href="https://arxiv.org/abs/2204.01681v2">End-to-End Reconstruction</a></li>
+								<li><a href="https://indico.cern.ch/event/855454/contributions/4596495/">ACAT 2021</a></li>
+								<li><a href="https://indico.cern.ch/event/1106990/contributions/4998017/">ACAT 2022</a></li>
 							</ul>
 						</div>
 					</div>
@@ -201,7 +206,7 @@
 
 
 					<section>
-						<h3>Object Condensation during Training</h3>
+						<h4>Object Condensation in Training</h4>
 						<!-- insert .mp4 file -->
 						<!-- <video>
 							<source data-src="plots/training.mp4" type="video/mp4" />
@@ -237,12 +242,19 @@
 								<p><br></p>
 								<div class="split-container">
 									<div class="'image-half">
-										<img src="plots/gravNet1.png" style="width: 100%; height: auto;" alt="Image">
+										<figure>
+											<img src="plots/gravNet1.png" style="width: 100%; height: auto;" alt="Image">
+											<figcaption style="font-size: 16px; margin-top: 0px">
+												<a href="https://arxiv.org/abs/1902.07987">https://arxiv.org/abs/1902.07987</a>
+											</figcaption>
+										</figure>
 										<!-- <img src="plots/gravNet1.png" style="width: 50%; height: auto;" alt="Image"> -->
 									</div>
 									<div class="'image-half">
 										<!-- <img src="plots/gravNet2.png" style="width: 50%; height: auto;" alt="Image"> -->
-										<img src="plots/gravNet2.png" style="width: 100%; height: auto;" alt="Image">
+										<figure>
+											<img src="plots/gravNet2.png" style="width: 100%; height: auto;" alt="Image">
+										</figure>
 									</div>
 								</div>
 							</div>
@@ -260,18 +272,96 @@
 										</ul>
 									</li>
 								</ol>
-								<img src="plots/Architecture.png" style="width: 100%; height: auto;" alt="Image">
+								<p><br></p>
+								<figure>
+									<img src="plots/Architecture.png" style="width: 100%; height: auto;" alt="Image">
+									<figcaption style="font-size: 16px; margin-top: 0px">
+										<a href="https://arxiv.org/abs/2204.01681v2">https://arxiv.org/abs/2204.01681v2</a>
+								</figure>
 							</div>
 
 						</div>
 					</section>
 
+					<section>
+						<h2>Noise Filter</h2>
+
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+						<h2> Creating Showers</h2>
+						<div class="split-container">
+							<div class="text-half">
+								<h4> Fast Clustering Algorithm</h4>
+								<ol>
+									<li> Sort hits by confidence $\beta$</li>
+									<li> Highest $\beta$ is first condensation point</li>
+									<li> Hits within distance threshold $t_d=0.25$ around $\beta$ are assigned to first shower</li>
+									<li> Remove already assigned hits from list</li>
+									<li> Repeat steps 2 - 4 as long as highest $\beta$ value is larger then threshold $t_\beta$ =0.3</li>
+									<li> Remaining hits are classified as noise</li>
+								</ol>
+
+								<p><i>More sophisticated clustering algorithms such as HDBSCAN can improve our performance at the cost of speed</i></p>
+
+							</div>
+							<div class="image-half">
+								<img src="plots/cluster_space.png" alt="Image">
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h2> Matching Showers</h2>
+						<div class="split-container">
+							<div class="text-half">
+								<h4> Matching Conditions</h4>
+
+								<ul>
+									<li> Predicted showers are matched with true showers based on their energy weighted overlap. </li>
+									<li> More precisely: The interesction over union between two showers has to be larger than 33%</li>
+									<li> If truth shower and predicted shower have equal energy this tranlates that at least 50% of each shower overlaps</li>
+								</ul>
+
+								<p style="font-size: 24px"><b>Important: <br></b>Our matching conditions influence our performance metrics, but not change the performance of our algorithm.
+								<br>A low threshold allows us to find a match for nearly every shower but comes at the cost of energy resolution and vice versa.</p>
+
+
+							</div>
+							<div class="image-half">
+								<img src="plots/Showers.png" alt="Image">
+								<h4>Potential scenarios for matching</h4>
+							</div>
+						</div>
+
+					</section>
 				</section>
 
 				<!-- Results -->
 				<section>
 					<section>
 						<h2>Results</h2>
+						<div class="split-container">
+							<div class="text-half">
+								<h3>Clustering & Energy </h3>
+								<ul>
+									<li>200 (40) minimum bias proton-proton collisions</li>
+									<li>Single electrons, photons, charged pions, or kaons</li>
+									<li>η = 2.0</li>
+									<li>E =  20 GeV, 50 GeV, 100 GeV, 200 GeV</li>
+								</ul>
+							</div>
+							<div class="text-half">
+								<h3>Particle Identification</h3>
+								<ul>
+									<li>60-90 showers</li>
+									<li>including electrons, photons, charged pions, kaons</li>
+								</ul>
+								<p>	<br></p>
+							</div>
 					</section>
 					<section>
 						<h2>Shower Quality</h2>
@@ -290,9 +380,9 @@
 							</div>
 						</div>
 
-						<p><br>Purity and Containment show a trade-off.<br>
-							If our algorithm merges showers we retain a high containment but loose purity.
-							Splitting showers on the other hand will reduce keep purity high but reduces containment.
+						<p><br>Purity and Containment show a trade-off<br>
+							If our algorithm merges showers we retain a high containment but loose purity<br>
+							Splitting showers on the other hand will reduce keep purity high but reduces containment
 						</p>
 					</section>
 
@@ -328,6 +418,21 @@
 							</div>
 							<div class="image">
 							<img src="plots/containment_hadronic.png" alt="Image 2">
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h2>Response and Resolution</h2>
+						Metrics for matched showers
+						<div class="split-container">
+							<div class="text-half">
+								<h3>Response</h3>
+								<i>Mean of predicted over truth</i>
+							</div>
+							<div class="text-half">
+								<h3>Resolution</h3>
+								<i> Standard deviation of predicted over truth divided by response</i>
 							</div>
 						</div>
 					</section>
@@ -385,14 +490,38 @@
 						<h3>Particle Identfication</h3>
 						<div class="image-container">
 							<div class="image">
-							<img src="plots/pid_40_20.png" alt="Image 1">
+							<img src="plots/pid_0_100.jpg" alt="Image 1">
 							</div>
 							<div class="image">
-							<img src="plots/pid_200_200.png" alt="Image 2">
+							<img src="plots/pid_100_200.jpg" alt="Image 2">
 							</div>
 						</div>
 					</section>
 
+				</section>
+
+				<section>
+					<div class="split-container">
+						<div class="text-half">
+							<h3>Summary</h3>
+							<ul>
+								<li>Able to efficiently find single showers within 200 Pilup</li>
+								<li>Learn energy correction factor to improve energy resolution</li>
+								<li>Identify partices in multi-shower events</li>
+								<li>First step towards a praticle-flow algorithm by adding track information</li>
+							</ul>
+						</div>
+						<div class="text-half">
+							<h3>Outlook</h3>
+							<ul>
+								<li>Continuing to improve the network architecture</li>
+								<li>Exploring other clustering methods</li>
+								<li>Particle identification in pile-up events</li>
+								<li>Train on HGCAL simulations</li>
+
+							</ul>
+						</div>
+					</div>
 				</section>
 			</div>
 		</div>
@@ -413,6 +542,7 @@
 				margin: 0,
 				minScale: 0.2,
 				maxScale: 2.0,
+				slideNumber: true,
 
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.MathJax2 ]
