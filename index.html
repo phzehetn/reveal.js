@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
 		<link rel="stylesheet" href="dist/theme/sky.css">
+		<!-- <link rel="stylesheet" href="dist/theme/custom_sky.css"> -->
 		<!-- <link rel="stylesheet" href="dist/theme/dracula.css"> -->
 
 		<!-- Theme used for syntax highlighted code -->
@@ -22,7 +23,13 @@
 				<section data-markdown >
 					<textarea data-template>
 						## End-to-End Reconstruction for Highly Granular Calorimeters
-						Dolores Garcia, Jan Kieseler, Shah Rukh Qasim, **Philipp Zehetner**
+						**Philipp Zehetner**¹², Jan Kieseler¹³, Shah Rukh Qasim⁴, Dolores Garcia¹
+						<br>
+						<br>
+						<br>
+
+						¹CERN, ²Ludwig-Maximilians-Universität München, ³Karlsruher Institut für Technologie, ⁴Universtität Zürich
+
 					</textarea>
 				</section>
 
@@ -33,9 +40,12 @@
 						<div class="text-half">
 						<h4>High-Luminosity-LHC </h4>
 						<ul>
-							<li>CMS collisions at 200 pile-up (PU)</li>
-							<li>Upgrade for end-cap calorimeter</li>
-							<li>HGCAL: 2x ~3M readout channels</li>
+							<li>CMS will observe 200 pile-up (PU) events</li>
+							<li>Upgrade for end-cap calorimeter
+								<br> &nbsp; <b>H</b>igh <b>G</b>ranularity <b>CAL</b>orimeter (HGCAL)</li>
+							</li>
+							<li>HGCAL: 2x ~3M readout channels
+							<br>&nbsp; 52 sampling layers each side</li>
 							<li>Silicon sensors and scintillators</li>
 						</ul>
 						<!-- vertical space-->
@@ -44,7 +54,7 @@
 
 						<h4>Reconstruction Goals</h4>
 						<ul>
-							<li>Combine detector hits with tracks</li>
+							<li>Combine calorimeter hits with tracks</li>
 							<li><b>Cluster</b> hits to build showers</li>
 							<li><b>Regress</b> energy of showers</li>
 							<li><b>Classify</b> shower type</li>
@@ -56,7 +66,8 @@
 							<figure>
 								<img src="plots/HGCALdesign_new.png" alt="Image">
 								<figcaption style="font-size: 15px;">
-									<a href="https://arxiv.org/abs/1708.08234">https://arxiv.org/abs/1708.08234</a>
+									<!-- <a href="https://arxiv.org/abs/1708.08234">https://arxiv.org/abs/1708.08234</a> -->
+									<a href="https://cds.cern.ch/record/2293646/">https://cds.cern.ch/record/2293646/</a>
 								</figcaption>
 							</figure>
 							<h4>CMS - HGCAL</h4>
@@ -67,10 +78,10 @@
 							<ul>
 								<li>Graph-based neural network
 									<br>&nbsp implemented in tensorflow</li>
-								<li>GravNet Architecture
-									<br>&nbsp transforming point cloud into graph</li>
 								<li>Object Condensation Loss
 									<br>&nbsp allowing points to represent objects </li>
+								<li>GravNet Architecture
+									<br>&nbsp transforming point cloud into graph</li>
 							</ul>
 							<!-- vertical space-->
 							<!-- <span style="display:inline-block; height: 80px;"></span> -->
@@ -88,17 +99,26 @@
 					</div>
 				</section>
 
-				<section class="custom-slide">
-					<h2>Training Events</h2>
-					<div class="split-container">
-						<div class="image-half">
-							<iframe src="plots/train_noPU.html"  width="810px" height="810px" frameborder="0"></iframe>
-						</div>
+				<section>
+					<section>
+						<div class="split-container">
+							<div class="image-half">
+								<h4>Toy Detector</h4>
+								<figure>
+									<img width="600px" src="plots/ToyDetector.png" alt="Image">
+								</figure>
+							</div>
 
-						<div class="text-half">
-							<h4>Detector</h4>
+							<div class="image-half">
+								<h4>HGCAL</h4>
+								<figure>
+									<img width="600px" src="plots/HGCALdesign_new.png" alt="Image">
+								</figure>
+							</div>
+
+						</div>
 							<ul>
-								<li>Toy Detector for easier developement (simulated with GEANT4)
+								<li>Toy Detector for faster developement (simulated with GEANT4)
 								</li>
 								<li>Similarities to HGCAL
 									<ul>
@@ -108,44 +128,56 @@
 								</li>
 								<li>Differences to HGCAL
 									<ul>
-										<li> onlys silicon sensors</li>
+										<li> only silicon sensors</li>
 										<li> no tracker, electronics or magnetic field</li>
 										<li> different geometry</li>
 									</ul>
 								</li>
 							</ul>
-							<!-- vertical space-->
-							<!-- <span style="display:inline-block; height: 80px;"></span> -->
-							<h4>Data Sets</h4>
-							<ul>
-								<li>Built from
-									<ul>
-										<li>Single particle simulations starting in front of detector </li>
-										<li>Minimum bias proton-proton collisions at 13 TeV at interaction point</li>
-									</ul>
-								</li>
-								<li>Train Data
-									<ul>
-										<li>Multiple showers + random noise</li>
-										<li>Multiple showers + random noise + 200 PU in random 30° φ region </li>
-									</ul>
-								</li>
-								<li>Test Data
-									<ul>
-										<li>Multiple showers + random noise</li>
-										<li>Single shower + random noise + 200 PU in full detector</li>
-									</ul>
-								</li>
-								<li> Tracks
-									<ul>
-										<li> Tracks are added for all charged particles</li>
-										<li> They contain a special flag and have the particles' original energy (+noise)
-									</ul>
-								</li>
-							</ul>
+					</section>
 
+					<section class="custom-slide">
+						<h2>Training Events</h2>
+						<div class="split-container">
+							<div class="image-half">
+								<iframe src="plots/train_noPU.html"  width="810px" height="810px" frameborder="0"></iframe>
+							</div>
+
+							<div class="text-half">
+								<!-- vertical space-->
+								<!-- <span style="display:inline-block; height: 80px;"></span> -->
+								<h4>Data Sets</h4>
+								<ul>
+									<li>Built from
+										<ul>
+											<li>Single particle simulations starting in front of detector </li>
+											<li>Minimum bias proton-proton collisions at 13 TeV at interaction point</li>
+										</ul>
+									</li>
+									<li>Train Data
+										<ul>
+											<li>Multiple showers + Gaussian noise</li>
+											<li>Multiple showers + Gaussian noise + 200 PU in random 30° φ region </li>
+										</ul>
+									</li>
+									<li>Test Data
+										<ul>
+											<li>Multiple showers + Gaussian noise</li>
+											<li>Single shower + Gaussian noise + 200 PU in full detector</li>
+										</ul>
+									</li>
+									<li> Tracks
+										<ul>
+											<li> Tracks are added for all charged particles</li>
+											<li> Tracks are flagged as such and have the particles original smeared out energy </li>
+										</ul>
+									</li>
+								</ul>
+
+							</div>
 						</div>
-					</div>
+
+					</section>
 
 				</section>
 
@@ -164,10 +196,11 @@
 								<ul>
 									<li> Colour represents different showers</li>
 									<li> Overlapping showers make clustering in detector space difficult</li>
-									<li> We learn mapping into clustering space</li>
-									<li> Along with cluster coordinates we learn a confidence β
-										<br> &nbsp; β close to 1 means that a hit can represent  shower </li>
-									<li> In clustering space hit from the same shower should overlap</li>
+									<li> Learn mapping into clustering space</li>
+									<li> Learn confidence $\beta$</li>
+									<li> $\beta$ close to 1 $\rightarrow$ hit can represent shower</li>
+									<li> In clustering space hits from the same shower should be close</li>
+									<li> Every shower should have at least one hit with high $\beta$ (condensation point)</li>
 								</ul>
 								<!-- <p> Map every hit from detector space to cluster space</p> -->
 							</dif>
@@ -182,22 +215,30 @@
 						<h2>Object Condensation</h2>
 						<div class="split-container">
 							<div class="text-half">
+							<p style="font-size: 25px;">Highest confidence $\beta$ for every shower gets assigned as condensation point, indicated by $\alpha$</p>
 								\[\begin{aligned}
-								 	q_\alpha &amp; = \tanh^2 \left( \beta_\alpha \right)  \quad \alpha \Rightarrow \text{condensation point} \\
-									V_\text{att} &amp; \propto q_\alpha \cdot \vert x - x_\alpha \vert^2 \\
-									V_\text{rep} &amp; \propto q_\alpha \cdot \max \left( 0, 1 - \vert x - x_\alpha \vert \right) \\
-									M_{jk} &amp; = \begin{cases}
-										1 &amp; \text{if hit } j \text{ part of shower } k \\
+									&amp; \text{Charge} \; &amp; q_\alpha = \tanh^2 \left( \beta_\alpha \right) \\
+									&amp; \text{Attractive Potential} \; &amp; V_\text{att} \propto q_\alpha \cdot \vert x - x_\alpha \vert^2 \\
+									&amp; \text{Repulsive Potential} \; &amp; V_\text{rep} \propto q_\alpha \cdot \max \left( 0, 1 - \vert x - x_\alpha \vert \right) \\
+									&amp; \text{Shower Matrix} \; &amp; M_{jk} = \begin{cases}
+										1 &amp; \text{hit } j \in \text{ shower } k \\
 										0 &amp; \text{else}
-									\end{cases} \\
+										\end{cases}
+								\end{aligned}\]
+								<b>Loss terms</b>
+								\[\begin{aligned}
 									L_\text{V} &amp; = \frac{1}{N} \sum_{j=1}^{N} q_j \sum_{k=1}^{K} \left( M_{jk} V_\text{att}(x_j) + (1-M_{jk}) V_\text{rep}(x_j) \right) \\
 									L_\beta &amp; = \frac{1}{K} \sum_{k=1}^{K} \left( 1 - \beta_\alpha^k \right) + \frac{1}{N_\text{noise}} \sum_{j \in N_\text{noise}} \beta_j \\
-								\end{aligned} \]
+								\end{aligned}\]
 							</div>
 
 							<div class="image-half">
 								<img src="plots/oc-potential.png" alt="Image">
-								<p>Potential seen by a single hit</p>
+								<p>Potential in cluster space <br>seen by a single hit</p>
+								<ul>
+									<li>Minimum: Matching condensation point</li>
+									<li>Local peaks: Condensation points from 3 other showers</li>
+								</ul>
 							</div>
 
 						</div>
@@ -216,7 +257,7 @@
 						</video>
 						<!-- <iframe width="800" height="800" src="https://www.youtube.com/embed/eIchwB6xJJI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> -->
 						<!-- <iframe width="800" height="800" src="training2.webm" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> -->
-</iframe>
+						<!-- </iframe> -->
 					</section>
 
 					<section>
@@ -230,11 +271,13 @@
 											<li>transformed features \(F_\text{LR}\)
 											<li>low-dimensional GravNet coordinates \(S\)
 										</ul>
-									<li> Use GravNet coordinates to build grap via KNN </li>
+									<li> Use GravNet coordinates to build graph
+										<br> &nbsp; $\rightarrow$ connect $K$ nearest neighbours (KNN)
+									</li>
 									<li> Aggregate weighted \(F_\text{LR}\) over neighbours
 										<ul>
 											<li> Weights depend on distance between nodes</li>
-											<li> Aggregation is <i> mean</i> or <i>max</i></li>
+											<li> Aggregation is <i> mean</i> and <i>max</i> value of all neighbours</li>
 										</ul>
 									</li>
 									<li> Concatenate to produce output $F_\text{out}$</li>
@@ -283,11 +326,6 @@
 						</div>
 					</section>
 
-					<section>
-						<h2>Noise Filter</h2>
-
-					</section>
-
 				</section>
 
 				<section>
@@ -299,7 +337,7 @@
 								<ol>
 									<li> Sort hits by confidence $\beta$</li>
 									<li> Highest $\beta$ is first condensation point</li>
-									<li> Hits within distance threshold $t_d=0.25$ around $\beta$ are assigned to first shower</li>
+									<li> Hits within distance threshold $t_d$ = 0.25 <br>around $\beta$ are assigned to first shower</li>
 									<li> Remove already assigned hits from list</li>
 									<li> Repeat steps 2 - 4 as long as highest $\beta$ value is larger then threshold $t_\beta$ =0.3</li>
 									<li> Remaining hits are classified as noise</li>
@@ -309,6 +347,7 @@
 
 							</div>
 							<div class="image-half">
+								<h4>Cluster Space</h4>
 								<img src="plots/cluster_space.png" alt="Image">
 							</div>
 						</div>
@@ -321,13 +360,13 @@
 								<h4> Matching Conditions</h4>
 
 								<ul>
-									<li> Predicted showers are matched with true showers based on their energy weighted overlap. </li>
-									<li> More precisely: The interesction over union between two showers has to be larger than 33%</li>
-									<li> If truth shower and predicted shower have equal energy this tranlates that at least 50% of each shower overlaps</li>
+									<li> Reconstructed showers are matched with true showers based on their energy weighted overlap. </li>
+									<li> More precisely: The intersection over union between two showers has to be larger than 33%</li>
+									<li> If truth shower and reconstructed shower have equal energy, this translates that at least 50% of each shower overlaps</li>
 								</ul>
 
-								<p style="font-size: 24px"><b>Important: <br></b>Our matching conditions influence our performance metrics, but not change the performance of our algorithm.
-								<br>A low threshold allows us to find a match for nearly every shower but comes at the cost of energy resolution and vice versa.</p>
+								<p style="font-size: 24px"><b>Important: <br></b>The matching conditions influence the performance metrics, but do not change the performance of the algorithm.
+								<br>A low threshold allows to find a match for nearly every shower but comes at the cost of degraded energy resolution and vice versa.</p>
 
 
 							</div>
@@ -343,24 +382,35 @@
 				<!-- Results -->
 				<section>
 					<section>
-						<h2>Results</h2>
+						<h2>Datasets</h2>
 						<div class="split-container">
 							<div class="text-half">
+								<p style="font-size: 30px;">to evaluate</p>
 								<h3>Clustering & Energy </h3>
 								<ul>
+									<li> Single shower</li>
+									<ul>
+										<li>Electrons, photons, charged pions, or kaons (K-long)</li>
+										<li>E =  20 GeV, 50 GeV, 100 GeV, 200 GeV</li>
+										<li>η = 2.0</li>
+									</ul>
+									<li>Random Gaussian noise</li>
 									<li>200 (40) minimum bias proton-proton collisions</li>
-									<li>Single electrons, photons, charged pions, or kaons</li>
-									<li>η = 2.0</li>
-									<li>E =  20 GeV, 50 GeV, 100 GeV, 200 GeV</li>
 								</ul>
 							</div>
 							<div class="text-half">
+								<p style="font-size: 30px;">to evaluate</p>
 								<h3>Particle Identification</h3>
 								<ul>
 									<li>60-90 showers</li>
-									<li>including electrons, photons, charged pions, kaons</li>
+									<ul>
+										<li>Electrons, photons, charged pions, kaons (K-long)</li>
+										<li>0.1 GeV ≤ E ≤ 200 GeV</li>
+										<li>1.5 ≤ η ≤ 3.0</li>
+									</ul>
+									<li>Random Gaussian noise</li>
+									<li>No pile-up</li>
 								</ul>
-								<p>	<br></p>
 							</div>
 					</section>
 					<section>
@@ -368,57 +418,79 @@
 						<div class="split-container">
 							<div class="text-half">
 								<h3>Efficiency</h3>
-								<i> Percentage of truth showers that are matched to a predicted shower</i>
+								<i> Percentage of truth showers that are matched to a reconstructed shower</i>
 							</div>
 							<div class="text-half">
 								<h3>Purity</h3>
-								<i> Energy of a predicted shower that belongs to matched truth shower</i>
+								<i> Energy of a reconstructed shower that belongs to matched truth shower</i>
 							</div>
 							<div class="text-half">
 								<h3>Containment</h3>
-								<i> Energy of truth shower that is contained in the matched predicted shower</i>
+								<i> Energy of truth shower that is contained in the matched reconstructed shower</i>
 							</div>
 						</div>
 
-						<p><br>Purity and Containment show a trade-off<br>
-							If our algorithm merges showers we retain a high containment but loose purity<br>
-							Splitting showers on the other hand will reduce keep purity high but reduces containment
-						</p>
+						<p><br>Trade-off between Purity and Containment</p>
+						<ul>
+							<li style="font-size: 30px;">Algorithms that tend to <b>merge showers </b>will have <b>high containment</b>, but low purity</li>
+							<li style="font-size: 30px;">Algorithms that tend to <b>split showers </b>will have low containment, but can have <b>high purity</b></li>
+						</ul>
 					</section>
 
 					<section>
 						<h3>Efficiency</h3>
 						<div class="image-container">
 							<div class="image">
-							<img src="plots/efficiency_hadronic.png" alt="Image 1">
+							<img height="700px" src="plots/efficiency_electromagnetic.png" alt="Image 2">
 							</div>
 							<div class="image">
-							<img src="plots/efficiency_electromagnetic.png" alt="Image 2">
+							<img height="700px" src="plots/efficiency_hadronic.png" alt="Image 1">
 							</div>
 						</div>
+						Above 13 GeV $p_T$ almost perfect efficiency except for hadrons in 200 pile-up
+					</section>
+
+					<section>
+						<h3>Containment</h3>
+						<div class="image-container">
+							<div class="image">
+								<img height="700px" src="plots/containment_electromagnetic.png" alt="Image 1">
+								<div style="font-size: 30px"> Reconstructed showers almost fully contain true showers</div>
+							</div>
+							<div class="image">
+								<img height="700px" src="plots/containment_hadronic.png" alt="Image 2">
+								<div style="font-size: 30px">
+									Reconstructed showers contain most of true showers
+								</div>
+							</div>
+						</div>
+						<div style="font-size: 30px">
+							<b>Containment is independent of pile-up or momentum but differs between EM and HAD showers</b>
 					</section>
 
 					<section>
 						<h3>Purity</h3>
 						<div class="image-container">
 							<div class="image">
-							<img src="plots/purity_electromagnetic.png" alt="Image 1">
+							<img height="700px" src="plots/purity_electromagnetic.png" alt="Image 1">
 							</div>
 							<div class="image">
-							<img src="plots/purity_hadronic.png" alt="Image 2">
+							<img height="700px" src="plots/purity_hadronic.png" alt="Image 2">
 							</div>
 						</div>
-					</section>
+						<div style="font-size: 30px">
+							<ul>
+								<li>
+									Reconstructed showers also contain PU-hits
+								</li>
+								<li>
+									This effect is strongest for low energies and high pile-up
+								</li>
+								<li>
+									Can be improved at the cost of containment
+								</li>
+							</ul>
 
-					<section>
-						<h3>Contaiment</h3>
-						<div class="image-container">
-							<div class="image">
-							<img src="plots/containment_electromagnetic.png" alt="Image 1">
-							</div>
-							<div class="image">
-							<img src="plots/containment_hadronic.png" alt="Image 2">
-							</div>
 						</div>
 					</section>
 
@@ -428,13 +500,30 @@
 						<div class="split-container">
 							<div class="text-half">
 								<h3>Response</h3>
-								<i>Mean of predicted over truth</i>
+								<i>Mean of predicted energy over true energy</i>
 							</div>
 							<div class="text-half">
 								<h3>Resolution</h3>
-								<i> Standard deviation of predicted over truth divided by response</i>
+								<i> Standard deviation of predicted energy over true energy divided by response</i>
 							</div>
 						</div>
+						<br>
+						<br>
+						<b>Baseline:</b>
+						<br>
+						<ul>
+							<li>
+								Use truth information for clustering
+							</li>
+							<li>
+								Energy is sum of all hit energies belonging to shower
+								<!-- unweighted?  -->
+							</li>
+							<li>
+								Pile-up may contaminate truth information for overlapping hits
+							</li>
+
+						</ul>
 					</section>
 
 
@@ -442,11 +531,14 @@
 						<h3>Response - 40PU</h3>
 						<div class="image-container">
 							<div class="image">
-							<img src="plots/response_electromagnetic_40PU.png" alt="Image 1">
+							<img height="700px" src="plots/response_electromagnetic_40PU.png" alt="Image 1">
 							</div>
 							<div class="image">
-							<img src="plots/response_hadronic_40PU.png" alt="Image 2">
+							<img height="700px" src="plots/response_hadronic_40PU.png" alt="Image 2">
 							</div>
+						</div>
+						<div>
+							Response mostly flat for both EM and HAD showers
 						</div>
 					</section>
 
@@ -454,11 +546,24 @@
 						<h3>Resolution - 40PU</h3>
 						<div class="image-container">
 							<div class="image">
-							<img src="plots/resolution_electromagnetic_40PU.png" alt="Image 1">
+							<img height="700px" src="plots/resolution_electromagnetic_40PU.png" alt="Image 1">
 							</div>
 							<div class="image">
-							<img src="plots/resolution_hadronic_40PU.png" alt="Image 2">
+							<img height="700px" src="plots/resolution_hadronic_40PU.png" alt="Image 2">
 							</div>
+						</div>
+						<div>
+							<ul>
+								<li>
+									Calorimetric energy resolution improves with higher energies
+								</li>
+								<li>
+									Track information improves electron reconstruction
+								</li>
+								<li>
+									Offset between optimal clusterng and reconstruction of X%
+								</li>
+							</ul>
 						</div>
 					</section>
 
@@ -466,11 +571,24 @@
 						<h3>Response - 200PU</h3>
 						<div class="image-container">
 							<div class="image">
-							<img src="plots/response_electromagnetic_200PU.png" alt="Image 1">
+							<img height="700px" src="plots/response_electromagnetic_200PU.png" alt="Image 1">
 							</div>
 							<div class="image">
-							<img src="plots/response_hadronic_200PU.png" alt="Image 2">
+							<img height="700px" src="plots/response_hadronic_200PU.png" alt="Image 2">
 							</div>
+						</div>
+						<div>
+							<ul>
+								<li>
+									Increased impurities from higher pile-up deteriorate response
+								</li>
+								<li>
+									Expected from the purity metrics
+								</li>
+								<li>
+ 									Plan to investigate more sophisticated clustering algorithms (e.g. HDBSCAN)
+								</li>
+							</ul>
 						</div>
 					</section>
 
@@ -478,11 +596,24 @@
 						<h3>Resolution - 200PU</h3>
 						<div class="image-container">
 							<div class="image">
-							<img src="plots/resolution_electromagnetic_200PU.png" alt="Image 1">
+							<img height="700px" src="plots/resolution_electromagnetic_200PU.png" alt="Image 1">
 							</div>
 							<div class="image">
-							<img src="plots/resolution_hadronic_200PU.png" alt="Image 2">
+							<img height="700px" src="plots/resolution_hadronic_200PU.png" alt="Image 2">
 							</div>
+						</div>
+						<div>
+							<ul>
+								<li>
+									Calorimetric energy resolution improves with higher energies
+								</li>
+								<li>
+									Track information improves electron reconstruction
+								</li>
+								<li>
+									Offset between optimal clusterng and reconstruction of X%
+								</li>
+							</ul>
 						</div>
 					</section>
 
@@ -496,32 +627,80 @@
 							<img src="plots/pid_100_200.jpg" alt="Image 2">
 							</div>
 						</div>
+						<div>
+							Particle identification better for lower energies
+						</div>
 					</section>
 
 				</section>
 
 				<section>
+					<h2>Computational Requirements</h2>
 					<div class="split-container">
 						<div class="text-half">
-							<h3>Summary</h3>
+							Inference time for 200 PU events only including the network prediction and the
+							showers building (as this can be done in multiple ways).
+							<br><br>
 							<ul>
-								<li>Able to efficiently find single showers within 200 Pilup</li>
-								<li>Learn energy correction factor to improve energy resolution</li>
-								<li>Identify partices in multi-shower events</li>
-								<li>First step towards a praticle-flow algorithm by adding track information</li>
+								<li>
+									Inference time scales linear with number of input hits
+								</li>
+								<li>
+									In 200 PU events inference needs around one second per event
+								</li>
+								<li>
+									We have yet to explore potential optimizations
+								</li>
 							</ul>
 						</div>
-						<div class="text-half">
-							<h3>Outlook</h3>
-							<ul>
-								<li>Continuing to improve the network architecture</li>
-								<li>Exploring other clustering methods</li>
-								<li>Particle identification in pile-up events</li>
-								<li>Train on HGCAL simulations</li>
+						<div class="image-half">
+							<img src="plots/speedtest.jpg">
+						</div>
 
-							</ul>
-						</div>
 					</div>
+				</section>
+
+				<section>
+					<section>
+						<div class="split-container">
+							<div class="text-half">
+								<h3>Summary</h3>
+								<ul>
+									<li>Able to efficiently find single showers within 200 Pilup</li>
+									<li>Learn energy correction factor to improve energy resolution</li>
+									<li>Identify partices in multi-shower events</li>
+									<li>First step towards a particle-flow algorithm by adding track information</li>
+								</ul>
+							</div>
+							<div class="text-half">
+								<h3>Outlook</h3>
+								<ul>
+									<li>Continuing to improve the network architecture</li>
+									<li>Exploring other clustering methods</li>
+									<li>Particle identification in pile-up events</li>
+									<li>Train on HGCAL simulations</li>
+
+								</ul>
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h2>Thank you for your attention!</h2>
+						<div class="split-container">
+							<div class="text-half">
+								This work has been sponsored by the Wolfgang Gentner Programme of the German
+								Federal Ministry of Education and Research
+								<br>(grant no. 13E18CHA)
+							</div>
+							<div class="text-half">
+								We thank Ian Fisk and the Flatiron Institute for their support with access to
+								their GPU cluster.
+								<br>
+								<br>
+								<br>
+							</div>
+					</section>
 				</section>
 			</div>
 		</div>
@@ -545,7 +724,7 @@
 				slideNumber: true,
 
 				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.MathJax2 ]
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.MathJax2 ],
 			});
 		</script>
 
@@ -680,7 +859,7 @@
 				</div>
 				<!-- <div id="header-right">HEADER-RIGHT</div> -->
 				<div id="footer-left">
-					Connecting The Dots 2023
+					Philipp Zehetner
 				</div>
 				<div id="footer-right">
 					10.10.2023
