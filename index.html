@@ -28,7 +28,7 @@
 						<br>
 						<br>
 
-						¹CERN, ²Ludwig-Maximilians-Universität München, ³Karlsruher Institut für Technologie, ⁴Universtität Zürich
+						¹CERN, ²University of Munich, ³Karlsruhe Institute of Technology, ⁴University of Zurich
 
 					</textarea>
 				</section>
@@ -77,7 +77,7 @@
 							<h4>Methods</h4>
 							<ul>
 								<li>Graph-based neural network
-									<br>&nbsp implemented in tensorflow</li>
+									<br>&nbsp implemented in TensorFlow</li>
 								<li>Object Condensation Loss
 									<br>&nbsp allowing points to represent objects </li>
 								<li>GravNet Architecture
@@ -107,6 +107,20 @@
 								<figure>
 									<img width="600px" src="plots/ToyDetector.png" alt="Image">
 								</figure>
+								<ul>
+									<li>
+										56 Sampling layers with 200 µm silicon sensors as active material
+									</li>
+									<li>
+										Sensors square in η and φ
+									</li>
+									<li>
+										~3 Million readout channels per end-cap
+									</li>
+									<li>
+										Standalone simulation using <a href="https://geant4.web.cern.ch/">Geant</a>
+									</li>
+								</ul>
 							</div>
 
 							<div class="image-half">
@@ -114,26 +128,23 @@
 								<figure>
 									<img width="600px" src="plots/HGCALdesign_new.png" alt="Image">
 								</figure>
+								<ul>
+									<li>
+										52 Sampling layers with 120 µm, 200 µm, 300 µm silicon and scintillators
+									</li>
+									<li>
+										Heaxgonal silicon sensors
+									</li>
+									<li>
+										~3 Million readout channels per end-cap
+									</li>
+									<li>
+										Simulation within CMS Software (<a href="http://cms-sw.github.io/index.html">CMSSW</a>)
+									</li>
+								</ul>
 							</div>
 
 						</div>
-							<ul>
-								<li>Toy Detector for faster developement (simulated with GEANT4)
-								</li>
-								<li>Similarities to HGCAL
-									<ul>
-										<li> 2x ~3M readout channels</li>
-										<li> ~250k active channels in 200 PU</li>
-									</ul>
-								</li>
-								<li>Differences to HGCAL
-									<ul>
-										<li> only silicon sensors</li>
-										<li> no tracker, electronics or magnetic field</li>
-										<li> different geometry</li>
-									</ul>
-								</li>
-							</ul>
 					</section>
 
 					<section class="custom-slide">
@@ -141,6 +152,7 @@
 						<div class="split-container">
 							<div class="image-half">
 								<iframe src="plots/train_noPU.html"  width="810px" height="810px" frameborder="0"></iframe>
+								<!-- <iframe src="plots/train_noPU.html"  frameborder="0"></iframe> -->
 							</div>
 
 							<div class="text-half">
@@ -148,28 +160,60 @@
 								<!-- <span style="display:inline-block; height: 80px;"></span> -->
 								<h4>Data Sets</h4>
 								<ul>
-									<li>Built from
+									<!-- <li>Built from
 										<ul>
 											<li>Single particle simulations starting in front of detector </li>
 											<li>Minimum bias proton-proton collisions at 13 TeV at interaction point</li>
 										</ul>
+									</li> -->
+									<li>
+										<b>Particle Showers</b>
+										<ul>
+											<li>
+												Electrons, photons, charged pions, or kaons (K-long)
+											</li>
+											<li>
+												0.1 GeV < E < 200 GeV
+											</li>
+											<li>
+												1.5 < η < 3.0
+											</li>
+										</ul>
 									</li>
-									<li>Train Data
+									<br>
+									<li>
+										<b>Minimum bias</b>
+										<ul>
+											<li>
+												Proton-proton collisions at 13 TeV
+											</li>
+											<li>
+												Simulated with PYTHIA8
+											</li>
+											<li>
+												Used for pile-up
+											</li>
+										</ul>
+									</li>
+									<br>
+									<li> <b>Tracks</b>
+										<ul>
+											<li> Tracks are added for all charged particles</li>
+											<li> Tracks are flagged as such and have the particles original smeared out energy </li>
+										</ul>
+									</li>
+									<br>
+									<li><b>Train Data</b>
 										<ul>
 											<li>Multiple showers + Gaussian noise</li>
 											<li>Multiple showers + Gaussian noise + 200 PU in random 30° φ region </li>
 										</ul>
 									</li>
-									<li>Test Data
+									<br>
+									<li><b>Test Data</b>
 										<ul>
 											<li>Multiple showers + Gaussian noise</li>
 											<li>Single shower + Gaussian noise + 200 PU in full detector</li>
-										</ul>
-									</li>
-									<li> Tracks
-										<ul>
-											<li> Tracks are added for all charged particles</li>
-											<li> Tracks are flagged as such and have the particles original smeared out energy </li>
 										</ul>
 									</li>
 								</ul>
@@ -212,7 +256,7 @@
 					</section>
 
 					<section>
-						<h2>Object Condensation</h2>
+						<h3>Object Condensation</h3>
 						<div class="split-container">
 							<div class="text-half">
 							<p style="font-size: 25px;">Highest confidence $\beta$ for every shower gets assigned as condensation point, indicated by $\alpha$</p>
@@ -233,7 +277,12 @@
 							</div>
 
 							<div class="image-half">
-								<img src="plots/oc-potential.png" alt="Image">
+								<figure>
+									<img src="plots/oc-potential.png" alt="Image">
+									<figcaption>
+										<a href="https://arxiv.org/abs/2002.03605">Object Condensation</a>
+									</figcaption>
+								</figure>
 								<p>Potential in cluster space <br>seen by a single hit</p>
 								<ul>
 									<li>Minimum: Matching condensation point</li>
@@ -264,7 +313,7 @@
 						<h2>GravNet</h2>
 						<div class="split-container">
 							<div class="text-half">
-								<h4> GravNet Architecture</h4>
+								<h4> GravNet Layer</h4>
 								<ol>
 									<li> Transform input features \( F_\text{in} \) via dense layer into
 										<ul>
@@ -348,7 +397,11 @@
 							</div>
 							<div class="image-half">
 								<h4>Cluster Space</h4>
-								<img src="plots/cluster_space.png" alt="Image">
+								<figure>
+									<img src="plots/cluster_space.png" alt="Image">
+
+								</figure>
+
 							</div>
 						</div>
 					</section>
@@ -358,6 +411,7 @@
 						<div class="split-container">
 							<div class="text-half">
 								<h4> Matching Conditions</h4>
+								<p style="font-size: 30px">To evaluate the performance of the algorithm, reconstructed showers are matched with truth showers.</p>
 
 								<ul>
 									<li> Reconstructed showers are matched with true showers based on their energy weighted overlap. </li>
@@ -371,8 +425,15 @@
 
 							</div>
 							<div class="image-half">
-								<img src="plots/Showers.png" alt="Image">
-								<h4>Potential scenarios for matching</h4>
+								<figure>
+									<img height="700px" src="plots/matching3.png" alt="Image">
+									<figcaption style="text-align: left;">
+										1) True shower and predicted shower overlap <br>
+										2) More complicated matching scenario
+
+									</figcaption>
+								</figure>
+								<!-- <h4>Potential scenarios for matching</h4> -->
 							</div>
 						</div>
 
@@ -561,7 +622,7 @@
 									Track information improves electron reconstruction
 								</li>
 								<li>
-									Offset between optimal clusterng and reconstruction of X%
+									Offset between optimal clustering and reconstruction between 3% and 8%
 								</li>
 							</ul>
 						</div>
@@ -611,7 +672,7 @@
 									Track information improves electron reconstruction
 								</li>
 								<li>
-									Offset between optimal clusterng and reconstruction of X%
+									Offset between optimal clustering and reconstruction larger of electromagnetic showers
 								</li>
 							</ul>
 						</div>
@@ -638,8 +699,8 @@
 					<h2>Computational Requirements</h2>
 					<div class="split-container">
 						<div class="text-half">
-							Inference time for 200 PU events only including the network prediction and the
-							showers building (as this can be done in multiple ways).
+							Inference time for 200 PU events only including the network prediction and no
+							clustering <br>(as this can be done in multiple ways).
 							<br><br>
 							<ul>
 								<li>
@@ -666,10 +727,10 @@
 							<div class="text-half">
 								<h3>Summary</h3>
 								<ul>
-									<li>Able to efficiently find single showers within 200 Pilup</li>
+									<li>Able to efficiently reconstruct showers within 200 Pilup</li>
 									<li>Learn energy correction factor to improve energy resolution</li>
 									<li>Identify partices in multi-shower events</li>
-									<li>First step towards a particle-flow algorithm by adding track information</li>
+									<li>Step towards an end-to-end differntiable particle-flow algorithm by adding track information</li>
 								</ul>
 							</div>
 							<div class="text-half">
