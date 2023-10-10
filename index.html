@@ -8,7 +8,8 @@
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/sky.css">
+		<!-- <link rel="stylesheet" href="dist/theme/sky.css"> -->
+		<link rel="stylesheet" href="dist/theme/white-contrast.css">
 		<!-- <link rel="stylesheet" href="dist/theme/custom_sky.css"> -->
 		<!-- <link rel="stylesheet" href="dist/theme/dracula.css"> -->
 
@@ -22,7 +23,7 @@
 				<!-- <section data-markdown> -->
 				<section data-markdown >
 					<textarea data-template>
-						## End-to-End Reconstruction for Highly Granular Calorimeters
+						## End-to-End Reconstruction Algorithm for Highly Granular Calorimeters
 						**Philipp Zehetner**¹², Jan Kieseler¹³, Shah Rukh Qasim⁴, Dolores Garcia¹
 						<br>
 						<br>
@@ -57,7 +58,7 @@
 							<li>Combine calorimeter hits with tracks</li>
 							<li><b>Cluster</b> hits to build showers</li>
 							<li><b>Regress</b> energy of showers</li>
-							<li><b>Classify</b> shower type</li>
+							<li><b>Classify</b> particle ID</li>
 							<li>All of this using one <b>differentiable</b> network</li>
 						</ul>
 						</div>
@@ -81,7 +82,8 @@
 								<li>Object Condensation Loss
 									<br>&nbsp allowing points to represent objects </li>
 								<li>GravNet Architecture
-									<br>&nbsp transforming point cloud into graph</li>
+									<!-- <br>&nbsp transforming point cloud into graph</li> -->
+									<br>&nbsp A dynamic GNN that operates on point clouds</li>
 							</ul>
 							<!-- vertical space-->
 							<!-- <span style="display:inline-block; height: 80px;"></span> -->
@@ -570,7 +572,7 @@
 						</div>
 						<br>
 						<br>
-						<b>Baseline:</b>
+						<b>Baseline: Ideal Clustering</b>
 						<br>
 						<ul>
 							<li>
@@ -727,9 +729,9 @@
 							<div class="text-half">
 								<h3>Summary</h3>
 								<ul>
-									<li>Able to efficiently reconstruct showers within 200 Pilup</li>
-									<li>Learn energy correction factor to improve energy resolution</li>
-									<li>Identify partices in multi-shower events</li>
+									<li>Able to <b>efficiently</b> reconstruct showers within <b>200 Pilup</b></li>
+									<li>Learn <b>energy correction</b> factor to improve energy resolution</li>
+									<li><b>Particle ID</b> in multi-shower events</li>
 									<li>Step towards an end-to-end differntiable particle-flow algorithm by adding track information</li>
 								</ul>
 							</div>
@@ -740,7 +742,6 @@
 									<li>Exploring other clustering methods</li>
 									<li>Particle identification in pile-up events</li>
 									<li>Train on HGCAL simulations</li>
-
 								</ul>
 							</div>
 						</div>
@@ -748,15 +749,18 @@
 
 					<section>
 						<h2>Thank you for your attention!</h2>
+						<br>
+						<br>
+						<br>
 						<div class="split-container">
-							<div class="text-half">
-								This work has been sponsored by the Wolfgang Gentner Programme of the German
+							<div class="text-half" style="text-align: center">
+								<i>This work has been sponsored by the Wolfgang Gentner Programme of the German
 								Federal Ministry of Education and Research
-								<br>(grant no. 13E18CHA)
+								<br>(grant no. 13E18CHA)</i>
 							</div>
-							<div class="text-half">
-								We thank Ian Fisk and the Flatiron Institute for their support with access to
-								their GPU cluster.
+							<div class="text-half"style="text-align: center">
+								<i>We thank Ian Fisk and the Flatiron Institute for their support with access to
+								their GPU cluster.</i>
 								<br>
 								<br>
 								<br>
@@ -863,6 +867,9 @@
 
 		<style>
 		/* Adjust margins */
+		.reveal .slide-number {
+			font-size: 24pt; }
+
 		.reveal {
 		margin: 0; /* Remove default margins */
 		}
