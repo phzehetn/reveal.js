@@ -24,19 +24,21 @@
 				<section data-markdown >
 					<textarea data-template>
 						## End-to-End Reconstruction Algorithm for Highly Granular Calorimeters
-						**Philipp Zehetner**¹², Jan Kieseler¹³, Shah Rukh Qasim⁴, Dolores Garcia¹
+						**Philipp Zehetner**¹², Jan Kieseler¹³, Shah Rukh Qasim⁴, Dolores Garcia¹, Kenneth Long¹
 						<br>
 						<br>
 						<br>
 
 						¹CERN, ²University of Munich, ³Karlsruhe Institute of Technology, ⁴University of Zurich
-
+						<br><br>
+						<b>Work done in context of ML4Reco</b>
 					</textarea>
 				</section>
 
 
 				<section class="custom-slide">
 					<h3> Motivation</h3>
+					Single step reconstruction of complex events can optimally use all available information
 					<div class="split-container">
 						<div class="text-half">
 						<h4>High-Luminosity-LHC </h4>
@@ -46,7 +48,6 @@
 								<br> &nbsp; <b>H</b>igh <b>G</b>ranularity <b>CAL</b>orimeter (HGCAL)</li>
 							</li>
 							<li>HGCAL: 2x ~3M readout channels
-							<br>&nbsp; 52 sampling layers each side</li>
 							<li>Silicon sensors and scintillators</li>
 						</ul>
 						<!-- vertical space-->
@@ -75,28 +76,25 @@
 						</div>
 
 						<div class="text-half">
-							<h4>Methods</h4>
+							<h4>Previous Work</h4>
 							<ul>
-								<li>Graph-based neural network
-									<br>&nbsp implemented in TensorFlow</li>
-								<li>Object Condensation Loss
-									<br>&nbsp allowing points to represent objects </li>
-								<li>GravNet Architecture
-									<!-- <br>&nbsp transforming point cloud into graph</li> -->
-									<br>&nbsp A dynamic GNN that operates on point clouds</li>
+								<li><a href="https://indico.cern.ch/event/1252748/contributions/5521495/">Connecting The Dots 2023</a></li>
+								<li><a href="https://indico.cern.ch/event/1106990/contributions/4998017/">ACAT 2022</a></li>
+								<li><a href="https://indico.cern.ch/event/855454/contributions/4596495/">ACAT 2021</a></li>
+								<li><a href="https://arxiv.org/abs/2204.01681v2">End-to-End Reconstruction</a></li>
+								<li><a href="https://arxiv.org/abs/1902.07987">GravNet</a></li>
+								<li><a href="https://arxiv.org/abs/2002.03605">Object Condensation</a></li>
+							</ul>
+							<p> <br> </p>
+							<h4>Related Work</h4>
+							<ul>
+								<li><a href="https://arxiv.org/abs/2309.06782">Machine Learning Particle Flow Reconstruction for the CLIC detector</a></li>
+								<li>Machine Learning Reconstruction for FCC</li>
+								<li>Improvements over established reconstruction approaches in both cases</li>
 							</ul>
 							<!-- vertical space-->
 							<!-- <span style="display:inline-block; height: 80px;"></span> -->
-							<p> <br> </p>
 
-							<h4>References</h4>
-							<ul>
-								<li><a href="https://arxiv.org/abs/2002.03605">Object Condensation</a></li>
-								<li><a href="https://arxiv.org/abs/1902.07987">GravNet</a></li>
-								<li><a href="https://arxiv.org/abs/2204.01681v2">End-to-End Reconstruction</a></li>
-								<li><a href="https://indico.cern.ch/event/855454/contributions/4596495/">ACAT 2021</a></li>
-								<li><a href="https://indico.cern.ch/event/1106990/contributions/4998017/">ACAT 2022</a></li>
-							</ul>
 						</div>
 					</div>
 				</section>
@@ -111,7 +109,7 @@
 								</figure>
 								<ul>
 									<li>
-										56 Sampling layers with 200 µm silicon sensors as active material
+										~50 Sampling layers with 200 µm silicon sensors as active material
 									</li>
 									<li>
 										Sensors square in η and φ
@@ -132,7 +130,7 @@
 								</figure>
 								<ul>
 									<li>
-										52 Sampling layers with 120 µm, 200 µm, 300 µm silicon and scintillators
+										~50 Sampling layers with 120 µm, 200 µm, 300 µm silicon and scintillators
 									</li>
 									<li>
 										Heaxgonal silicon sensors
@@ -393,8 +391,13 @@
 									<li> Repeat steps 2 - 4 as long as highest $\beta$ value is larger then threshold $t_\beta$ =0.3</li>
 									<li> Remaining hits are classified as noise</li>
 								</ol>
+								<br> <br>
 
-								<p><i>More sophisticated clustering algorithms such as HDBSCAN can improve our performance at the cost of speed</i></p>
+								<h5> Alternative: </h5>
+								<p>
+									More sophisitacted clustering algorithms such as
+									<a href="https://link.springer.com/chapter/10.1007/978-3-642-37456-2_14">HDBSCAN</a>
+								</p>
 
 							</div>
 							<div class="image-half">
@@ -472,89 +475,29 @@
 										<li>1.5 ≤ η ≤ 3.0</li>
 									</ul>
 									<li>Random Gaussian noise</li>
-									<li>No pile-up</li>
+									<li>0 pile-up</li>
 								</ul>
 							</div>
-					</section>
-					<section>
-						<h2>Shower Quality</h2>
-						<div class="split-container">
-							<div class="text-half">
-								<h3>Efficiency</h3>
-								<i> Percentage of truth showers that are matched to a reconstructed shower</i>
-							</div>
-							<div class="text-half">
-								<h3>Purity</h3>
-								<i> Energy of a reconstructed shower that belongs to matched truth shower</i>
-							</div>
-							<div class="text-half">
-								<h3>Containment</h3>
-								<i> Energy of truth shower that is contained in the matched reconstructed shower</i>
-							</div>
-						</div>
-
-						<p><br>Trade-off between Purity and Containment</p>
-						<ul>
-							<li style="font-size: 30px;">Algorithms that tend to <b>merge showers </b>will have <b>high containment</b>, but low purity</li>
-							<li style="font-size: 30px;">Algorithms that tend to <b>split showers </b>will have low containment, but can have <b>high purity</b></li>
-						</ul>
 					</section>
 
 					<section>
 						<h3>Efficiency</h3>
 						<div class="image-container">
 							<div class="image">
-							<img height="700px" src="plots/efficiency_electromagnetic.png" alt="Image 2">
+							<img height="700px" src="plots/postCTD_electromagnetic_efficiency.png" alt="Image 2">
 							</div>
 							<div class="image">
-							<img height="700px" src="plots/efficiency_hadronic.png" alt="Image 1">
+							<img height="700px" src="plots/postCTD_hadronic_efficiency.png" alt="Image 1">
 							</div>
 						</div>
-						Above 13 GeV $p_T$ almost perfect efficiency except for hadrons in 200 pile-up
-					</section>
-
-					<section>
-						<h3>Containment</h3>
-						<div class="image-container">
-							<div class="image">
-								<img height="700px" src="plots/containment_electromagnetic.png" alt="Image 1">
-								<div style="font-size: 30px"> Reconstructed showers almost fully contain true showers</div>
-							</div>
-							<div class="image">
-								<img height="700px" src="plots/containment_hadronic.png" alt="Image 2">
-								<div style="font-size: 30px">
-									Reconstructed showers contain most of true showers
-								</div>
-							</div>
-						</div>
-						<div style="font-size: 30px">
-							<b>Containment is independent of pile-up or momentum but differs between EM and HAD showers</b>
-					</section>
-
-					<section>
-						<h3>Purity</h3>
-						<div class="image-container">
-							<div class="image">
-							<img height="700px" src="plots/purity_electromagnetic.png" alt="Image 1">
-							</div>
-							<div class="image">
-							<img height="700px" src="plots/purity_hadronic.png" alt="Image 2">
-							</div>
-						</div>
-						<div style="font-size: 30px">
-							<ul>
-								<li>
-									Reconstructed showers also contain PU-hits
-								</li>
-								<li>
-									This effect is strongest for low energies and high pile-up
-								</li>
-								<li>
-									Can be improved at the cost of containment
-								</li>
-							</ul>
-
-						</div>
+						<ul>
+							<li>
+								Efficiency for electromagnetic showers close to perfect even in 200 PU
+							</li>
+							<li>
+								Hadronic shower efficiency approaches 100% for higher energies
+							</li>
+						</ul>
 					</section>
 
 					<section>
@@ -567,7 +510,7 @@
 							</div>
 							<div class="text-half">
 								<h3>Resolution</h3>
-								<i> Standard deviation of predicted energy over true energy divided by response</i>
+								<i> Standard deviation of predicted energy <br>over mean of predicted energy</i>
 							</div>
 						</div>
 						<br>
@@ -580,7 +523,6 @@
 							</li>
 							<li>
 								Energy is sum of all hit energies belonging to shower
-								<!-- unweighted?  -->
 							</li>
 							<li>
 								Pile-up may contaminate truth information for overlapping hits
@@ -591,17 +533,70 @@
 
 
 					<section>
-						<h3>Response - 40PU</h3>
+						<h3>Response - 0P U</h3>
 						<div class="image-container">
 							<div class="image">
-							<img height="700px" src="plots/response_electromagnetic_40PU.png" alt="Image 1">
+							<!-- <img height="700px" src="plots/response_electromagnetic_40PU.png" alt="Image 1"> -->
+							<img height="700px" src="plots/response_em_pu0.png" alt="Image 1">
 							</div>
 							<div class="image">
-							<img height="700px" src="plots/response_hadronic_40PU.png" alt="Image 2">
+							<img height="700px" src="plots/response_had_pu0.png" alt="Image 2">
 							</div>
 						</div>
 						<div>
-							Response mostly flat for both EM and HAD showers
+							<ul>
+								<li>
+									Electromagnetic and hadronic response as close to linear as baseline
+								</li>
+							</ul>
+						</div>
+					</section>
+
+					<section>
+						<h3>Resolution - 0 PU</h3>
+						<div class="image-container">
+							<div class="image">
+							<img height="700px" src="plots/resolution_em_pu0.png" alt="Image 1">
+							</div>
+							<div class="image">
+							<img height="700px" src="plots/resolution_had_pu0.png" alt="Image 2">
+							</div>
+						</div>
+						<div>
+							<ul>
+								<li>
+									EM: Reconstructed showers identical to baseline
+								</li>
+								<li>
+									Limited by detector resolution
+								</li>
+								<li>
+									Small offset for hadronic showers
+								</li>
+							</ul>
+						</div>
+					</section>
+
+					<section>
+						<h3>Response - 40PU</h3>
+						<div class="image-container">
+							<div class="image">
+							<!-- <img height="700px" src="plots/response_electromagnetic_40PU.png" alt="Image 1"> -->
+							<img height="700px" src="plots/response_em_pu40.png" alt="Image 1">
+							</div>
+							<div class="image">
+							<img height="700px" src="plots/response_had_pu40.png" alt="Image 2">
+							</div>
+						</div>
+						<div>
+							<ul>
+								<li>
+									EM response contaminated by PU for low energies, otherwise close to baseline
+								</li>
+								<li>
+									Hadronic response closer to linear than clustering truth information
+								</li>
+							</ul>
 						</div>
 					</section>
 
@@ -609,10 +604,10 @@
 						<h3>Resolution - 40PU</h3>
 						<div class="image-container">
 							<div class="image">
-							<img height="700px" src="plots/resolution_electromagnetic_40PU.png" alt="Image 1">
+							<img height="700px" src="plots/resolution_em_pu40.png" alt="Image 1">
 							</div>
 							<div class="image">
-							<img height="700px" src="plots/resolution_hadronic_40PU.png" alt="Image 2">
+							<img height="700px" src="plots/resolution_had_pu40.png" alt="Image 2">
 							</div>
 						</div>
 						<div>
@@ -621,10 +616,7 @@
 									Calorimetric energy resolution improves with higher energies
 								</li>
 								<li>
-									Track information improves electron reconstruction
-								</li>
-								<li>
-									Offset between optimal clustering and reconstruction between 3% and 8%
+									Offset between truth assisted clustering and reconstruction due to PU
 								</li>
 							</ul>
 						</div>
@@ -634,22 +626,19 @@
 						<h3>Response - 200PU</h3>
 						<div class="image-container">
 							<div class="image">
-							<img height="700px" src="plots/response_electromagnetic_200PU.png" alt="Image 1">
+							<img height="700px" src="plots/response_em_pu200.png" alt="Image 1">
 							</div>
 							<div class="image">
-							<img height="700px" src="plots/response_hadronic_200PU.png" alt="Image 2">
+							<img height="700px" src="plots/response_had_pu200.png" alt="Image 2">
 							</div>
 						</div>
 						<div>
 							<ul>
 								<li>
-									Increased impurities from higher pile-up deteriorate response
+									Contamination from PU more noticable in 200 PU for energies belwo $50 \text{ GeV}$ ($=13 \text{ GeV} p_\text{T}$)
 								</li>
 								<li>
-									Expected from the purity metrics
-								</li>
-								<li>
- 									Plan to investigate more sophisticated clustering algorithms (e.g. HDBSCAN)
+									Response close to constant for higher energies
 								</li>
 							</ul>
 						</div>
@@ -659,22 +648,22 @@
 						<h3>Resolution - 200PU</h3>
 						<div class="image-container">
 							<div class="image">
-							<img height="700px" src="plots/resolution_electromagnetic_200PU.png" alt="Image 1">
+							<img height="700px" src="plots/resolution_em_pu200.png" alt="Image 1">
 							</div>
 							<div class="image">
-							<img height="700px" src="plots/resolution_hadronic_200PU.png" alt="Image 2">
+							<img height="700px" src="plots/resolution_had_pu200.png" alt="Image 2">
 							</div>
 						</div>
 						<div>
 							<ul>
 								<li>
-									Calorimetric energy resolution improves with higher energies
+									Charged particles have better resolution than neutral particles indicating that tracks help with clustering
 								</li>
 								<li>
-									Track information improves electron reconstruction
+									Offset between optimal clustering and reconstruction larger of electromagnetic showers decreases with higher energies
 								</li>
 								<li>
-									Offset between optimal clustering and reconstruction larger of electromagnetic showers
+									Resolution is dominated by clustering quality $\rightarrow$ fit to be taken with a grain of salt
 								</li>
 							</ul>
 						</div>
@@ -691,7 +680,7 @@
 							</div>
 						</div>
 						<div>
-							Particle identification better for lower energies
+							Accurate particle ID for low and high energies
 						</div>
 					</section>
 
@@ -712,7 +701,19 @@
 									In 200 PU events inference needs around one second per event
 								</li>
 								<li>
-									We have yet to explore potential optimizations
+									<b>We have yet to explore more options reducing inference time such as: </b>
+									<ul>
+										<li>
+											Downscaling working models
+										</li>
+										<li>
+											Aggressive noise filters or hit reduction via pre-clustering
+										</li>
+										<li>
+											Switching to modern tensorflow versions and updated drivers
+										</li>
+
+									</ul>
 								</li>
 							</ul>
 						</div>
@@ -727,27 +728,29 @@
 					<section>
 						<div class="split-container">
 							<div class="text-half">
-								<h3>Summary</h3>
+								<h1>Summary</h1>
 								<ul>
-									<li>Able to <b>efficiently</b> reconstruct showers within <b>200 Pilup</b></li>
-									<li>Learn <b>energy correction</b> factor to improve energy resolution</li>
-									<li><b>Particle ID</b> in multi-shower events</li>
-									<li>Step towards an end-to-end differntiable particle-flow algorithm by adding track information</li>
+									<li>We are able to <b>efficiently</b> reconstruct showers within <b>200 Pilup</b></li>
+									<li>Learn <b>energy correction</b> factors for each shower to improve energy resolution</li>
+									<li>Accurately predict <b>Particle ID</b> in multi-shower events</li>
+									<li>Addition of tracks improves clustering performance</li>
+									<li>Step towards an end-to-end differntiable particle-flow algorithm</li>
 								</ul>
 							</div>
 							<div class="text-half">
-								<h3>Outlook</h3>
+								<h1>Next Steps</h1>
 								<ul>
 									<li>Continuing to improve the network architecture</li>
 									<li>Exploring other clustering methods</li>
 									<li>Particle identification in pile-up events</li>
-									<li>Train on HGCAL simulations</li>
+									<li>Train network on HGCAL simulations</li>
+									<li>Integration in CMSSW</li>
 								</ul>
 							</div>
 						</div>
 					</section>
 
-					<section>
+					<!-- <section>
 						<h2>Thank you for your attention!</h2>
 						<br>
 						<br>
@@ -765,7 +768,7 @@
 								<br>
 								<br>
 							</div>
-					</section>
+					</section> -->
 				</section>
 			</div>
 		</div>
@@ -930,7 +933,7 @@
 					Philipp Zehetner
 				</div>
 				<div id="footer-right">
-					10.10.2023
+					17.01.2024
 				</div>
 			</div>
 		</div>
